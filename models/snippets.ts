@@ -32,7 +32,7 @@ const SnippetSchema = new Schema(
       index: true,
     },
 
-    // ✅ Ownership
+    // Ownership
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -40,7 +40,7 @@ const SnippetSchema = new Schema(
       index: true,
     },
 
-    // ✅ Engagement counters (derived data)
+    // Engagement counters (derived data)
     likesCount: {
       type: Number,
       default: 0,
@@ -55,7 +55,7 @@ const SnippetSchema = new Schema(
   }
 );
 
-// ✅ Indexes for performance
+// Indexes for performance
 SnippetSchema.index({ owner: 1 });
 SnippetSchema.index({ snippet_visibility: 1 });
 SnippetSchema.index({ snippet_tags: 1 });
