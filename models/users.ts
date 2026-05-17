@@ -1,34 +1,35 @@
-import mongoose, { Schema, models, model } from "mongoose";
+import mongoose, { Schema, models, model } from "mongoose"
 
 const UserSchema = new Schema(
   {
     auth0Id: {
       type: String,
       required: true,
-      unique: true,
-      index: true,
     },
 
-    user_name: {
+    name: {
       type: String,
       required: true,
       trim: true,
+      maxlength:20,
     },
 
-    user_pfp: {
+    profileImage: {
       type: String,
       default: "", // URL from blob storage
     },
 
-    user_email: {
+    email: {
       type: String,
       required: true,
-      index: true,
+      trim: true,
+      lowercase: true,
     },
 
-    user_bio: {
+    description: {
       type: String,
       default: "",
+      maxlength: 200,
     },
 
     lastLoginAt: {
@@ -38,11 +39,10 @@ const UserSchema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
 // Indexes
-UserSchema.index({ auth0Id: 1 });
-UserSchema.index({ user_email: 1 });
+UserSchema.index({ auth0Id: 1 }, { unique: true })
+UserSchema.index({ email: 1 }, { unique: true })
 
-export const User =
-  models.User || model("User", UserSchema);
+export const User = models.User || model("User", UserSchema)

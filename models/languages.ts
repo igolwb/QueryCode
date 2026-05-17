@@ -1,6 +1,6 @@
 import mongoose, { Schema, models, model } from "mongoose"
 
-const TagSchema = new Schema(
+const LanguageSchema = new Schema(
   {
     name: {
       type: String,
@@ -21,4 +21,4 @@ const TagSchema = new Schema(
   }
 )
 
-export const Tag = models.Tag || model("Tag", TagSchema)
+export const Language = models.Language || model("Language", LanguageSchema)
