@@ -1,19 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI
 
 if (!MONGODB_URI) {
-  throw new Error("Missing MONGODB_URI");
+  throw new Error("Missing MONGODB_URI")
 }
 
-const uri: string = MONGODB_URI;
+const uri: string = MONGODB_URI
 
 /**
  * Mongoose connection cache type
  */
 interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
+  conn: typeof mongoose | null
+  promise: Promise<typeof mongoose> | null
 }
 
 /**
@@ -21,7 +21,7 @@ interface MongooseCache {
  */
 declare global {
   // eslint-disable-next-line no-var
-  var mongoose: MongooseCache | undefined;
+  var mongoose: MongooseCache | undefined
 }
 
 /**
@@ -31,10 +31,10 @@ declare global {
 const cached: MongooseCache = global.mongoose ?? {
   conn: null,
   promise: null,
-};
+}
 
 if (!global.mongoose) {
-  global.mongoose = cached;
+  global.mongoose = cached
 }
 
 /**
@@ -42,13 +42,13 @@ if (!global.mongoose) {
  */
 export async function connectDB(): Promise<typeof mongoose> {
   if (cached.conn) {
-    return cached.conn;
+    return cached.conn
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(uri);
+    cached.promise = mongoose.connect(uri)
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  cached.conn = await cached.promise
+  return cached.conn
 }

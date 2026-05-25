@@ -19,9 +19,8 @@ const SnippetSchema = new Schema(
     tags: {
       type: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
       required: true,
-    validate: { validator: (
-      v: mongoose.Types.ObjectId[]
-    ) => v.length > 0,
+      validate: {
+        validator: (v: mongoose.Types.ObjectId[]) => v.length > 0,
         message: "A snippet must have at least one tag",
       },
     },
@@ -35,7 +34,7 @@ const SnippetSchema = new Schema(
     description: {
       type: String,
       default: "",
-      maxlength:500,
+      maxlength: 500,
     },
 
     visibility: {

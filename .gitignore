@@ -19,6 +19,8 @@
 /build
 
 # misc
+.cursor
+AGENTS.md
 .DS_Store
 *.pem
 
