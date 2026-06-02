@@ -16,13 +16,13 @@ export const userController = {
   },
 
   async getMe(request: NextRequest) {
-    const actor = requireRequestUser(request)
+    const actor = await requireRequestUser(request)
     const user = await userService.getMe(actor)
     return successResponse(user)
   },
 
   async updateMe(request: NextRequest) {
-    const actor = requireRequestUser(request)
+    const actor = await requireRequestUser(request)
     const body = await parseJsonBody(request, updateUserBodySchema)
     const user = await userService.updateMe(actor, body)
     return successResponse(user)

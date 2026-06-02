@@ -25,14 +25,25 @@ models/                     → Mongoose schemas
 
 **Error:** `{ "success": false, "error": { "message": "...", "code": "..." } }`
 
-## Authentication (interim)
+## Authentication
 
-Until Auth0 middleware is wired, send one of:
+### Browser / same-origin (recommended)
+
+1. Visit `http://localhost:3000/auth/login` (or use **Log in with Auth0** on the home page).
+2. Session cookie is set automatically; call API routes from the app or Postman with cookies enabled.
+
+Protected routes resolve the MongoDB user via Auth0 `sub` (upsert on each request).
+
+### Postman / machine clients (dev fallback)
 
 | Header | Purpose |
 |--------|---------|
 | `x-user-id` | MongoDB User `_id` (24-char hex) |
 | `x-auth0-sub` | Auth0 subject — resolved via `User.auth0Id` |
+
+Env vars (see `.env.example`): `AUTH0_SECRET`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`.
+
+Auth0 Dashboard → **Allowed Callback URLs**: `http://localhost:3000/auth/callback`
 
 ## Endpoints
 

@@ -10,7 +10,7 @@ export const favoriteController = {
     request: NextRequest,
     context: { params: Promise<Record<string, string | string[] | undefined>> }
   ) {
-    const actor = requireRequestUser(request)
+    const actor = await requireRequestUser(request)
     const { id } = parseParams(await context.params, snippetIdParamSchema)
     const result = await favoriteService.add(actor, id)
     return successResponse(result, 201)
@@ -20,7 +20,7 @@ export const favoriteController = {
     request: NextRequest,
     context: { params: Promise<Record<string, string | string[] | undefined>> }
   ) {
-    const actor = requireRequestUser(request)
+    const actor = await requireRequestUser(request)
     const { id } = parseParams(await context.params, snippetIdParamSchema)
     const result = await favoriteService.remove(actor, id)
     return successResponse(result)

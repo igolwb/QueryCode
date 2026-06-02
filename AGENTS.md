@@ -26,12 +26,19 @@ Concise guidance for AI agents working on this repo.
 
 | Path | Role |
 |------|------|
-| [app](app) | Pages, layouts, API routes (`app/api/<resource>/route.ts`) |
+| [app/api](app/api) | Thin route handlers → feature controllers |
+| [features](features) | Feature modules (`controllers`, `services`, `repositories`, `validations`, `types`, `utils`) |
+| [lib/api](lib/api) | `withHandler`, `successResponse`, `AppError`, Zod parse helpers |
+| [lib/auth0.ts](lib/auth0.ts) | Auth0 v4 client (`@auth0/nextjs-auth0`) |
+| [lib/auth](lib/auth) | `requireRequestUser` — Auth0 session + dev headers |
+| [middleware.ts](middleware.ts) | Mounts `/auth/login`, `/auth/logout`, `/auth/callback` |
 | [lib/mongodb.ts](lib/mongodb.ts) | `connectDB()` before DB access |
 | [models](models) | Mongoose schemas (see below) |
-| [components](components) | React UI |
+| [docs/API.md](docs/API.md) | Endpoints, examples, architecture |
 
 Export pattern for all models: `models.X || model("X", schema)`.
+
+**API rule:** Route files only call `withHandler(controller.method)`. No business logic in `route.ts`.
 
 ---
 
@@ -93,7 +100,7 @@ All models use `timestamps: true`. `Like` and `Favorite` disable `updatedAt`.
 ## Agent conventions
 
 - Small, focused diffs; use existing models — do not redefine schemas.
-- API routes: `app/api/<resource>/route.ts`, export `GET` / `POST` / etc.; call `connectDB()` first.
+- API routes: thin `app/api/.../route.ts` + logic in `features/<name>/`. `withHandler` calls `connectDB()` automatically.
 - Before finishing: `npm run typecheck`, `npm run lint`, `npm run format`.
 - DB changes: document migrations if schema or data shape changes.
 

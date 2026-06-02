@@ -1,8 +1,10 @@
-import { Geist, Geist_Mono, Inter } from "next/font/google"
+import { Geist_Mono, Inter } from "next/font/google"
+import { Auth0Provider } from "@auth0/nextjs-auth0/client"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/utils/utils"
+import { auth0 } from "@/lib/auth0"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -11,11 +13,13 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth0.getSession()
+
   return (
     <html
       lang="en"
@@ -28,7 +32,9 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <Auth0Provider user={session?.user}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </Auth0Provider>
       </body>
     </html>
   )
