@@ -1,11 +1,10 @@
-import type { NextRequest } from "next/server"
 import { auth0 } from "@/lib/auth0"
 
 /**
  * Mounts Auth0 routes: /auth/login, /auth/logout, /auth/callback, /auth/profile.
  * API routes handle their own auth via session in lib/auth/context.ts.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: Request) {
   return auth0.middleware(request)
 }
 
