@@ -10,17 +10,16 @@ const SnippetSchema = new Schema(
     },
 
     language: {
-      type: Schema.Types.ObjectId,
-      ref: "Language",
+      type: String,
+      trim: true,
       required: true,
     },
 
-    // Canonical tag links — see AGENTS.md "Tags"
     tags: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
+      type: [String],
       required: true,
       validate: {
-        validator: (v: mongoose.Types.ObjectId[]) => v.length > 0,
+        validator: (v: string[]) => v.length > 0,
         message: "A snippet must have at least one tag",
       },
     },
@@ -67,6 +66,8 @@ const SnippetSchema = new Schema(
   }
 )
 
+SnippetSchema.index({ language: 1 })
+SnippetSchema.index({ tags: 1 })
 SnippetSchema.index({ owner: 1 })
 SnippetSchema.index({ visibility: 1 })
 SnippetSchema.index({ tags: 1 })

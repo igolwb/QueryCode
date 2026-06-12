@@ -1,6 +1,3 @@
-import type { LanguageDto } from "@/features/languages/types/language.types"
-import type { TagDto } from "@/features/tags/types/tag.types"
-
 export interface SnippetOwnerDto {
   id: string
   name: string
@@ -13,8 +10,8 @@ export interface SnippetDto {
   code: string
   description: string
   visibility: "public" | "private"
-  language: LanguageDto
-  tags: TagDto[]
+  language: string
+  tags: string[]
   owner: SnippetOwnerDto
   likesCount: number
   favoritesCount: number

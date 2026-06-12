@@ -5,8 +5,7 @@ import type {
   SnippetDto,
   UpdateSnippetInput,
 } from "@/features/snippets/types/snippet.types"
-import { tagService } from "@/features/tags/services/tag.service"
-import { languageService } from "@/features/languages/services/language.service"
+
 import { userService } from "@/features/users/services/user.service"
 import { likeRepository } from "@/features/likes/repositories/like.repository"
 import { favoriteRepository } from "@/features/favorites/repositories/favorite.repository"
@@ -78,18 +77,16 @@ export const snippetService = {
     input: CreateSnippetInput
   ): Promise<SnippetDto> {
     const ownerId = await userService.resolveUserId(actor)
-    const [languageId, tagIds] = await Promise.all([
-      languageService.resolveLanguageId(input.language),
-      tagService.resolveTagIds(input.tags),
-    ])
+    const languageSlug = input.language
+    const tagSlugs = input.tags
 
     const snippet = await snippetRepository.create({
       name: input.name,
       code: input.code,
       description: input.description ?? "",
       visibility: input.visibility ?? "private",
-      language: languageId,
-      tags: tagIds,
+      language: languageSlug,
+      tags: tagSlugs,
       owner: ownerId,
     })
 
@@ -116,13 +113,11 @@ export const snippetService = {
     const updateData: Record<string, unknown> = { ...input }
 
     if (input.language !== undefined) {
-      updateData.language = await languageService.resolveLanguageId(
-        input.language
-      )
+      updateData.language = input.language
     }
 
     if (input.tags !== undefined) {
-      updateData.tags = await tagService.resolveTagIds(input.tags)
+      updateData.tags = input.tags
     }
 
     const updated = await snippetRepository.updateById(id, updateData)
@@ -181,12 +176,11 @@ async function buildListFilter(
   }
 
   if (params.language) {
-    const languageId = await languageService.resolveLanguageId(params.language)
-    filter.language = languageId
+    filter.language = params.language
   }
 
   if (params.tag) {
-    filter.tags = await tagService.getTagIdByInput(params.tag)
+    filter.tags = params.tag
   }
 
   if (params.search) {

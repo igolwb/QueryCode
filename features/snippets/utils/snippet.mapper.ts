@@ -1,5 +1,3 @@
-import { toLanguageDto } from "@/features/languages/utils/language.mapper"
-import { toTagDto } from "@/features/tags/utils/tag.mapper"
 import type { SnippetDto } from "@/features/snippets/types/snippet.types"
 
 interface PopulatedLean {
@@ -12,14 +10,14 @@ interface PopulatedLean {
   favoritesCount: number
   createdAt?: Date
   updatedAt?: Date
-  language: {
+  language: string | {
     _id: { toString(): string }
     name: string
     slug: string
     createdAt?: Date
     updatedAt?: Date
   }
-  tags: Array<{
+  tags: Array<string | {
     _id: { toString(): string }
     name: string
     slug: string
@@ -43,8 +41,8 @@ export function toSnippetDto(
     code: snippet.code,
     description: snippet.description ?? "",
     visibility: snippet.visibility,
-    language: toLanguageDto(snippet.language),
-    tags: snippet.tags.map(toTagDto),
+    language: typeof snippet.language === "string" ? snippet.language : snippet.language.slug,
+    tags: snippet.tags.map((t) => (typeof t === "string" ? t : t.slug)),
     owner: {
       id: snippet.owner._id.toString(),
       name: snippet.owner.name,

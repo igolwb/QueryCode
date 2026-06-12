@@ -3,20 +3,16 @@ import { Like } from "@/models/likes"
 import { Favorite } from "@/models/favorites"
 import type { ClientSession } from "mongoose"
 
-const populateConfig = [
-  { path: "language", select: "name slug" },
-  { path: "tags", select: "name slug" },
-  { path: "owner", select: "name profileImage" },
-]
+const ownerPopulate = { path: "owner", select: "name profileImage" }
 
 export const snippetRepository = {
   findById(id: string) {
-    return Snippet.findById(id).populate(populateConfig).lean()
+    return Snippet.findById(id).populate(ownerPopulate).lean()
   },
 
   findMany(filter: Record<string, unknown>, skip: number, limit: number) {
     return Snippet.find(filter)
-      .populate(populateConfig)
+      .populate(ownerPopulate)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -42,13 +38,9 @@ export const snippetRepository = {
     return Snippet.create([data], { session }).then(([doc]) => doc)
   },
 
-  updateById(
-    id: string,
-    data: Record<string, unknown>,
-    session?: ClientSession
-  ) {
+  updateById(id: string, data: Record<string, unknown>, session?: ClientSession) {
     return Snippet.findByIdAndUpdate(id, { $set: data }, { new: true, session })
-      .populate(populateConfig)
+      .populate(ownerPopulate)
       .lean()
   },
 

@@ -18,6 +18,7 @@ const UserSchema = new Schema(
       type: String,
       default: "", // URL from blob storage
     },
+    //
 
     email: {
       type: String,
@@ -42,6 +43,7 @@ const UserSchema = new Schema(
 )
 
 // Indexes
+UserSchema.index({ name: 1 }, { unique: true })
 UserSchema.index({ auth0Id: 1 }, { unique: true })
 UserSchema.index({ email: 1 }, { unique: true })
 
