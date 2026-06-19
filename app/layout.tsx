@@ -3,7 +3,7 @@ import { Auth0Provider } from "@auth0/nextjs-auth0/client"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/utils/utils"
+import { cn } from "@/lib/utils"
 import { auth0 } from "@/lib/auth0"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
